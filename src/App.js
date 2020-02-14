@@ -14,10 +14,19 @@ class App extends React.Component {
       const { data } = event
       console.log('data test:', data)
 
-      const parsed = JSON.parse(data)
-      console.log('parsed test:', parsed)
+      const action = JSON.parse(data)
+      console.log('action test:', action)
 
-      this.setState({ messages: parsed })
+      const { type, payload } = action
+
+      if (type === 'MESSAGE') {
+        const messages = [
+          ...this.state.messages,
+          payload
+        ]
+
+        this.setState({ messages })
+      }
     }
   }
 

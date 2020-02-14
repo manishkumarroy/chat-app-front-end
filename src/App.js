@@ -1,12 +1,14 @@
 import React from 'react';
 
 class App extends React.Component {
+  state = {
+    messages: []
+  }
+
   stream = new EventSource('http://localhost:4000/stream')
 
   componentDidMount () {
-    this.stream.onmessage = function (
-      event
-    ) {
+    this.stream.onmessage = event => {
       console.log('event test:', event)
 
       const { data } = event
@@ -14,11 +16,22 @@ class App extends React.Component {
 
       const parsed = JSON.parse(data)
       console.log('parsed test:', parsed)
+
+      this.setState({ messages: parsed })
     }
   }
 
   render () {
-    return <div>hello</div>
+    const paragraphs = this
+      .state
+      .messages
+      .map(message => <p
+        key={message.id}
+      >
+        {message.text}
+      </p>)
+
+    return <div>{paragraphs}</div>
   }
 }
 
